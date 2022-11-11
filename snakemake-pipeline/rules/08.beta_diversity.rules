@@ -1,0 +1,19 @@
+rule beta_diversity:
+    input:
+        species = "04.data_matrix/combind_data_matrix-reads-species.csv",
+        genus = "04.data_matrix/combind_data_matrix-reads-genus.csv"
+    output:
+        species = "05.beta_diversity/beta_diversity-species.csv",
+        genus = "05.beta_diversity/beta_diversity-genus.csv"
+    params:
+        log = "05.beta_diversity/beta_diversity.log",
+        sh = "05.beta_diversity/beta_diversity.sh",
+        Rscript = config['software']['Rscript'],
+        R_beta = config['scripts']['R_beta']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_beta} --input {input.species} --output {output.species}   2>{params.log}" >{params.sh}
+        echo "{params.Rscript} {params.R_beta} --input {input.genus} --output {output.genus}   2>{params.log}" >>{params.sh}
+        {params.Rscript} {params.R_beta} --input {input.species} --output {output.species}   2>{params.log}
+        {params.Rscript} {params.R_beta} --input {input.genus} --output {output.genus}   2>{params.log}
+        """

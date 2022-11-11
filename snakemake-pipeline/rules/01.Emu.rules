@@ -1,0 +1,27 @@
+rule Emu:
+    input:
+        "00.merge_data/{sample}.fastq",
+    output:
+        sam  = "01.Emu/{sample}_emu_alignments.sam",
+        read_assign = "01.Emu/{sample}_read-assignment-distributions.tsv",
+        abundance = "01.Emu/{sample}_rel-abundance.tsv",
+        unclass = "01.Emu/{sample}_unclassified.fq",
+    params:
+        log = "01.Emu/{sample}.Emu.log" ,
+        sh = "01.Emu/{sample}.Emu.sh" ,
+        env = config['software']['env'],
+        emu = config['software']['emu'],
+        thread = config['parameters']['emuThreads'],
+        emu_database = config['database']['emu_16S'],
+        out_dir = "01.Emu"
+
+    shell:
+        """
+        echo "source  activate {params.env}" >{params.sh}
+        echo "{params.emu} abundance {input} --db {params.emu_database} --output-dir {params.out_dir} --output-unclassified --threads {params.thread} --keep-files --keep-counts --keep-read-assignments 2>{params.log}" >>{params.sh}
+
+        source  activate {params.env}
+        {params.emu} abundance {input} --db {params.emu_database} --output-dir {params.out_dir} --output-unclassified --threads {params.thread} --keep-files --keep-counts --keep-read-assignments 2>{params.log}
+
+
+        """

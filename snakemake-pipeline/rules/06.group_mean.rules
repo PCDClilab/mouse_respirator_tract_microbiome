@@ -1,0 +1,15 @@
+rule group_mean:
+    input:
+        "04.data_matrix/combind_data_matrix-{level}.csv"
+    output:
+        "04.data_matrix/group_mean-{level}.csv"
+    params:
+        log = "04.data_matrix/group_mean-{level}.log",
+        sh = "04.data_matrix/group_mean-{level}.sh",
+        Rscript = config['software']['Rscript'],
+        R_group_mean = config['scripts']['R_group_mean']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_group_mean} --input {input} --output {output}   2>{params.log}" >{params.sh}
+        {params.Rscript} {params.R_group_mean} --input {input} --output {output}   2>{params.log}
+        """

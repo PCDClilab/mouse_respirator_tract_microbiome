@@ -1,0 +1,32 @@
+version: V.1.0.0
+data: 2022.09.23
+author: manjiao.liu@simceredx.com
+
+software:
+  samtools: /gpfsdata/apps/bin/samtools
+  env: /gpfsdata/home/zhangbei/miniconda3/envs/py37
+  emu: /gpfsdata/home/zhangbei/miniconda3/envs/py37/bin/emu
+  samtools: /gpfsdata/apps/bin/samtools
+  Rscript: /gpfsdata/home/liumj/miniconda3/envs/r4-base/bin/Rscript 
+  NanoPlot: /gpfsdata/Project/00.bin/miniconda/envs/python3.7/bin/NanoPlot
+
+database:
+  emu_16S: /gpfsdata/home/zhangbei/16S_database/EMU_DATABASE
+
+scripts:
+  R_combind_emu: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/combind_emu_rel_abundance.R
+  R_combind_ori_emu: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/combind_emu_original_rel_abundance.R
+  R_combind_mapping: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/combind_mapping_stats.R
+  R_data_matrix: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/data_matrix.R
+  R_data_matrix_reads: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/data_matrix_reads.R
+  R_group_mean: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/data_matrix_abundance_group_mean.R
+  R_alpha: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/alpha-diversity.R
+  R_beta: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/Beta_diversity_Bray-Curtis.R
+  R_recacu_abun: /gpfsdata/Project/06.influenza-mouse-16S/00.snakemake/scripts/abundance_recacu.R
+parameters:
+  emuThreads: 15
+  barplot_group: fecal_mock,fecal_IAV
+  alpha_diversity: fecal_mock,fecal_IAV
+  beta_diversity: fecal_mock,fecal_IAV
+ 
+  

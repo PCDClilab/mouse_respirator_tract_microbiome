@@ -1,0 +1,15 @@
+rule NanoQC:
+    input:
+        "00.merge_data/{sample}.fastq"
+    output:
+        directory("00.NanoQC/{sample}.QC")
+    params:
+        NanoPlot = config['software']['NanoPlot'],
+        log = "00.NanoQC/{sample}.NanoQC.log",
+        sh = "00.NanoQC/{sample}.NanoQC.sh"
+
+    shell:
+        """
+        echo "{params.NanoPlot} --fastq {input} -o {output} --maxlength 3000 -t 8  --plot hex dot  2>{params.log}" >{params.sh}
+        {params.NanoPlot} --fastq {input} -o {output} --maxlength 3000 -t 8  --plot hex dot  2>{params.log}
+        """
