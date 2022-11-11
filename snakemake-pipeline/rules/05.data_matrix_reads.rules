@@ -1,0 +1,36 @@
+rule data_matrix_reads:
+    input:
+        species = "03.combindResult/combind_rel_abundance-species.csv",
+        genus = "03.combindResult/combind_rel_abundance-genus.csv",
+        family = "03.combindResult/combind_rel_abundance-family.csv",
+        order = "03.combindResult/combind_rel_abundance-order.csv",
+        c_lass = "03.combindResult/combind_rel_abundance-class.csv",
+        phylum = "03.combindResult/combind_rel_abundance-phylum.csv",
+    output:
+        species = "04.data_matrix/combind_data_matrix-reads-species.csv",
+        genus = "04.data_matrix/combind_data_matrix-reads-genus.csv",
+        family = "04.data_matrix/combind_data_matrix-reads-family.csv",
+        order = "04.data_matrix/combind_data_matrix-reads-order.csv",
+        c_lass = "04.data_matrix/combind_data_matrix-reads-class.csv",
+        phylum = "04.data_matrix/combind_data_matrix-reads-phylum.csv"
+    params:
+        log = "03.combindResult/combind_data_matrix_reads.log",
+        sh = "03.combindResult/combind_data_matrix_reads.sh",
+        Rscript = config['software']['Rscript'],
+        R_data_matrix = config['scripts']['R_data_matrix_reads']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.species} --output {output.species} --level species  2>{params.log}" >{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.genus} --output {output.genus} --level genus 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.family} --output {output.family} --level family 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.order} --output {output.order} --level order 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.c_lass} --output {output.c_lass} --level class 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.phylum} --output {output.phylum} --level phylum 2>{params.log}" >>{params.sh}
+
+        {params.Rscript} {params.R_data_matrix} --input {input.species} --output {output.species} --level species  2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.genus} --output {output.genus} --level genus 2>>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.family} --output {output.family} --level family 2>>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.order} --output {output.order} --level order 2>>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.c_lass} --output {output.c_lass} --level class 2>>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.phylum} --output {output.phylum} --level phylum 2>>{params.log}
+        """

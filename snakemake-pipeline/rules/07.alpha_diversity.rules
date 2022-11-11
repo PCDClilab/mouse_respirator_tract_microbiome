@@ -1,0 +1,19 @@
+rule alpha_diversity:
+    input:
+        species = "04.data_matrix/combind_data_matrix-reads-species.csv",
+        genus = "04.data_matrix/combind_data_matrix-reads-genus.csv"
+    output:
+        species = "05.alpha_diversity/alhpa_diversity-species.csv",
+        genus = "05.alpha_diversity/alhpa_diversity-genus.csv"
+    params:
+        log = "05.alpha_diversity/alpha_diversity.log",
+        sh = "05.alpha_diversity/alpha_diversity.sh",
+        Rscript = config['software']['Rscript'],
+        R_alpha = config['scripts']['R_alpha']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_alpha} --input {input.species} --output {output.species}   2>{params.log}" >{params.sh}
+        echo "{params.Rscript} {params.R_alpha} --input {input.genus} --output {output.genus}   2>{params.log}" >>{params.sh}
+        {params.Rscript} {params.R_alpha} --input {input.species} --output {output.species}   2>{params.log}
+        {params.Rscript} {params.R_alpha} --input {input.genus} --output {output.genus}   2>{params.log}
+        """

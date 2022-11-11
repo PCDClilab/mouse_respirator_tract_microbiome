@@ -1,0 +1,56 @@
+rule combind_emu:
+    input:
+        species = expand ("01.Emu.collapse/{sample}_rel-abundance-species.tsv",sample = samples),
+        genus = expand ("01.Emu.collapse/{sample}_rel-abundance-genus.tsv", sample = samples),
+        family = expand ("01.Emu.collapse/{sample}_rel-abundance-family.tsv",sample = samples),
+        order =  expand ("01.Emu.collapse/{sample}_rel-abundance-order.tsv",sample = samples),
+        c_lass = expand ("01.Emu.collapse/{sample}_rel-abundance-class.tsv",sample = samples),
+        phylum = expand ("01.Emu.collapse/{sample}_rel-abundance-phylum.tsv",sample = samples)
+    output:
+        "03.combindResult/combind_rel_abundance-species.csv",
+        "03.combindResult/combind_rel_abundance-genus.csv",
+        "03.combindResult/combind_rel_abundance-family.csv",
+        "03.combindResult/combind_rel_abundance-order.csv",
+        "03.combindResult/combind_rel_abundance-class.csv",
+        "03.combindResult/combind_rel_abundance-phylum.csv"
+    params:
+        log = "03.combindResult/combind_rel_abundance.log",
+        sh = "03.combindResult/combind_rel_abundance.sh",
+        Rscript = config['software']['Rscript'],
+        R_combind_emu = config['scripts']['R_combind_emu']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_combind_emu} --input_dir 01.Emu.collapse {params.log}" >{params.sh}
+        {params.Rscript} {params.R_combind_emu} --input_dir 01.Emu.collapse 2>{params.log}
+        """
+rule combind_mapping_stats:
+    input:
+	    expand ("02.mapping.stats/{sample}.map.stats", sample = samples)
+    output:
+        mapping_stats =  "03.combindResult/combind_mapping_stats.csv"
+    params:
+        log = "03.combindResult/combind_mapping_stats.log",
+        sh = "03.combindResult/combind_mapping_stats.sh",
+        Rscript = config['software']['Rscript'],
+        R_combind_mapping = config['scripts']['R_combind_mapping']
+    shell:
+        """
+       echo "{params.Rscript} {params.R_combind_mapping} --input_dir 02.mapping.stats --out_file {output.mapping_stats} 2>{params.log}" >{params.sh}
+      {params.Rscript} {params.R_combind_mapping} --input_dir 02.mapping.stats --out_file {output.mapping_stats} 2>{params.log}
+       """
+rule combind_ori_emu:
+    input:
+        expand ("01.Emu/{sample}_rel-abundance.tsv", sample = samples)
+    output:
+        "03.combindResult/combind_rel_abundance.csv",
+    params:
+        log = "03.combindResult/combind_rel_abundance_ori.log",
+        sh = "03.combindResult/combind_rel_abundance_ori.sh",
+        Rscript = config['software']['Rscript'],
+        R_combind_emu = config['scripts']['R_combind_ori_emu']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_combind_emu} --input_dir 01.Emu.collapse {params.log}" >{params.sh}
+        {params.Rscript} {params.R_combind_emu} --input_dir 01.Emu.collapse 2>{params.log}
+        
+        """

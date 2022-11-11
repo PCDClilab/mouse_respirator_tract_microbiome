@@ -1,0 +1,36 @@
+rule data_matrix:
+    input:
+        species = "03.combindResult/combind_rel_abundance-species.csv",
+        genus = "03.combindResult/combind_rel_abundance-genus.csv",
+        family = "03.combindResult/combind_rel_abundance-family.csv",
+        c_lass = "03.combindResult/combind_rel_abundance-class.csv",
+        order = "03.combindResult/combind_rel_abundance-order.csv",
+        phylum = "03.combindResult/combind_rel_abundance-phylum.csv"
+    output:
+        species = "04.data_matrix/combind_data_matrix-species.csv",
+        genus = "04.data_matrix/combind_data_matrix-genus.csv",
+        family = "04.data_matrix/combind_data_matrix-family.csv",
+        order = "04.data_matrix/combind_data_matrix-order.csv",
+        c_lass = "04.data_matrix/combind_data_matrix-class.csv",
+        phylum = "04.data_matrix/combind_data_matrix-phylum.csv"
+    params:
+        log = "04.data_matrix/combind_data_matrix.log",
+        sh = "04.data_matrix/combind_data_matrix.sh",
+        Rscript = config['software']['Rscript'],
+        R_data_matrix = config['scripts']['R_data_matrix']
+    shell:
+        """
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.species} --output {output.species} --level species  2>{params.log}" >{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.genus} --output {output.genus} --level genus 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.family} --output {output.family} --level family 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.order} --output {output.order} --level order 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.c_lass} --output {output.c_lass} --level class 2>{params.log}" >>{params.sh}
+        echo "{params.Rscript} {params.R_data_matrix} --input {input.phylum} --output {output.phylum} --level phylum 2>{params.log}" >>{params.sh}
+
+        {params.Rscript} {params.R_data_matrix} --input {input.species} --output {output.species} --level species  2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.genus} --output {output.genus} --level genus 2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.family} --output {output.family} --level family 2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.order} --output {output.order} --level order 2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.c_lass} --output {output.c_lass} --level class 2>{params.log}
+        {params.Rscript} {params.R_data_matrix} --input {input.phylum} --output {output.phylum} --level phylum 2>{params.log}
+        """

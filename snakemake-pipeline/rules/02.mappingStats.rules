@@ -1,0 +1,12 @@
+rule mappingStats:
+    input:
+        "01.Emu/{sample}_emu_alignments.sam"
+    output:
+        stats  = "02.mapping.stats/{sample}.map.stats",
+    params:
+        samtools = config['software']['samtools'],
+    shell:
+        """
+        {params.samtools}  view {input} |awk  '{{print $1}}' |sort|uniq|wc -l  >{output.stats}
+        {params.samtools} view -F 4 {input} |awk '{{print $1}}' |sort|uniq|wc -l  >>{output.stats}
+        """

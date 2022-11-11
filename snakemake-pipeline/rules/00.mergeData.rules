@@ -1,0 +1,15 @@
+rule mergeData:
+    input:
+        lambda wildcards: bc_dict[wildcards.sample]
+    output:
+        fastq  = "00.merge_data/{sample}.fastq"
+    params:
+        log = "00.merge_data/{sample}.mergeData.log" ,
+        sh = "00.merge_data/{sample}.mergeData.sh" ,
+    shell:
+        """
+        echo "zcat {input}/*.fastq.gz > {output.fastq} 2>{params.log}" >{params.sh}
+        zcat {input}/*.fastq.gz > {output.fastq} 2>{params.log}
+
+        """
+

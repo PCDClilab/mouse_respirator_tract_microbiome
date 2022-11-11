@@ -1,0 +1,29 @@
+rule emu_collapse:
+    input:
+        "01.Emu/{sample}_rel-abundance.tsv"
+    output:
+        abun_ln = "01.Emu.collapse/{sample}_rel-abundance.tsv",
+        species = "01.Emu.collapse/{sample}_rel-abundance-species.tsv",
+        genus = "01.Emu.collapse/{sample}_rel-abundance-genus.tsv",
+        family = "01.Emu.collapse/{sample}_rel-abundance-family.tsv",
+        order = "01.Emu.collapse/{sample}_rel-abundance-order.tsv",
+        c_lass = "01.Emu.collapse/{sample}_rel-abundance-class.tsv",
+        phylum = "01.Emu.collapse/{sample}_rel-abundance-phylum.tsv"
+    params:
+        log = "01.Emu.collapse/{sample}.Emu.collapse.log" ,
+        sh = "01.Emu.collapse/{sample}.Emu.collapse.sh" ,
+        env = config['software']['env'],
+        emu = config['software']['emu'],
+        Rscript = config['software']['Rscript'],
+    shell:
+        """
+        source activate {params.env}
+        cp {input} {output.abun_ln}
+        {params.emu} collapse-taxonomy {output.abun_ln} genus 2>{params.log}
+        {params.emu} collapse-taxonomy {output.abun_ln} family 2>{params.log}
+        {params.emu} collapse-taxonomy {output.abun_ln} order 2>{params.log}
+        {params.emu} collapse-taxonomy {output.abun_ln} class 2>{params.log}
+        {params.emu} collapse-taxonomy {output.abun_ln} phylum 2>{params.log}
+        {params.emu} collapse-taxonomy {output.abun_ln} species 2>{params.log}
+
+        """
