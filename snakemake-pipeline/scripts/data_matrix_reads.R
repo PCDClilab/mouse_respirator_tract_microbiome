@@ -21,7 +21,7 @@ input = as.character(args$input)
 output = as.character(args$output)
 
 data = read.csv(input,head=T)
-data = data[data$species !="",]
+data = data[data[,level]!="",]
 data_level = data[,c("sample",level,"estimated.counts")]
 data_level$estimated.counts = round(data_level$estimated.counts,0)
 data_level = na.omit(data_level)
